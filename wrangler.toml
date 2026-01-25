@@ -1,0 +1,9 @@
+name = "codex-system"
+main = "src/routes/system/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+CF_ACCOUNT_ID = ""
+CF_API_TOKEN = ""
+BASEROW_API_URL = ""
+BASEROW_TOKEN = ""
