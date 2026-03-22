@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Codex Universal Procedural Graph",
+  "type": "object",
+  "properties": {
+    "industries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "naics": { "type": "string" },
+          "name": { "type": "string" },
+          "cluster": { "type": "string" },
+          "archetypeId": { "type": "string" }
+        },
+        "required": ["naics", "name", "archetypeId"]
+      }
+    },
+    "archetypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["id", "label"]
+      }
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "archetypeId": { "type": "string" },
+          "steps": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["id", "label", "archetypeId"]
+      }
+    }
+  },
+  "required": ["industries", "archetypes", "workflows"]
+}
