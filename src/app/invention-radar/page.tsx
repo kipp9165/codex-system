@@ -29,6 +29,7 @@ import Summary from "./components/Summary";
 import RiskFlags from "./components/RiskFlags";
 import NoveltyHints from "./components/NoveltyHints";
 import Opportunities from "./components/Opportunities";
+import { IndustryContextPanel } from "../../../apps/invention-radar/components/IndustryContextPanel";
 
 import type { StructureResult } from "./utils/detectStructure";
 import type { SummaryResult } from "./utils/summarize";
@@ -86,6 +87,7 @@ export default function InventionRadarPage() {
   const [results, setResults] = useState<AnalysisResults | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>("summary");
   const [analysing, setAnalysing] = useState(false);
+  const [selectedNaics, setSelectedNaics] = useState<string | null>(null);
 
   const runAnalysis = useCallback((text: string) => {
     setAnalysing(true);
@@ -252,6 +254,27 @@ export default function InventionRadarPage() {
               {activeTab === "opportunities" && (
                 <Opportunities data={results.opportunities} />
               )}
+            </div>
+
+            {/* Industry context panel */}
+            <div className="rounded-xl bg-white border border-slate-200 p-6 shadow-sm">
+              <label
+                htmlFor="naics-input"
+                className="mb-2 block text-sm font-semibold text-slate-700"
+              >
+                NAICS Code (optional)
+              </label>
+              <input
+                id="naics-input"
+                type="text"
+                className="rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-sm text-slate-800 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-40"
+                placeholder="e.g. 621"
+                value={selectedNaics ?? ""}
+                onChange={(e) =>
+                  setSelectedNaics(e.target.value.trim() || null)
+                }
+              />
+              <IndustryContextPanel naics={selectedNaics} />
             </div>
           </div>
         )}
