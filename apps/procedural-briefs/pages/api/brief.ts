@@ -21,15 +21,15 @@ export default function handler(
   try {
     const body = req.body as Partial<GenerateBriefInput>;
 
-    if (!body.naics || !body.goal) {
+    if (!body.naics) {
       return res
         .status(400)
-        .json({ ok: false, error: "naics and goal are required" });
+        .json({ ok: false, error: "naics is required" });
     }
 
     const brief = generateProceduralBrief({
       naics: String(body.naics),
-      goal: String(body.goal),
+      goal: body.goal ? String(body.goal) : "",
     });
 
     if (!brief) {

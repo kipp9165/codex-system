@@ -30,6 +30,7 @@ import RiskFlags from "./components/RiskFlags";
 import NoveltyHints from "./components/NoveltyHints";
 import Opportunities from "./components/Opportunities";
 import { IndustryContextPanel } from "../../../apps/invention-radar/components/IndustryContextPanel";
+import { ProceduralBriefsLink } from "../../../apps/invention-radar/components/ProceduralBriefsLink";
 
 import type { StructureResult } from "./utils/detectStructure";
 import type { SummaryResult } from "./utils/summarize";
@@ -275,6 +276,7 @@ export default function InventionRadarPage() {
                 }
               />
               <IndustryContextPanel naics={selectedNaics} />
+              <ProceduralBriefsLink naics={selectedNaics} goal={input} />
             </div>
           </div>
         )}
