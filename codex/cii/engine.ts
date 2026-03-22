@@ -1,50 +1,50 @@
-import data from "./cupg-example-healthcare.json";
+export type Workflow = {
+  id: string;
+  label: string;
+};
 
 export type Industry = {
   naics: string;
   name: string;
-  cluster: string;
-  archetypeId: string;
 };
 
 export type Archetype = {
   id: string;
   label: string;
-  description?: string;
 };
 
-export type Workflow = {
-  id: string;
-  label: string;
-  archetypeId: string;
-  steps: string[];
-};
-
-type Graph = {
-  industries: Industry[];
-  archetypes: Archetype[];
+export type IndustryProfile = {
+  industry: Industry;
+  archetype: Archetype | null;
   workflows: Workflow[];
 };
 
-const graph = data as Graph;
+const INDUSTRY_PROFILES: IndustryProfile[] = [
+  {
+    industry: { naics: "621", name: "Ambulatory Health Care Services" },
+    archetype: { id: "regulated-service", label: "Regulated Service Provider" },
+    workflows: [
+      { id: "intake", label: "Patient intake and registration" },
+      { id: "care-delivery", label: "Clinical care delivery" },
+      { id: "billing", label: "Insurance billing and claims" },
+      { id: "compliance", label: "Regulatory and compliance reporting" }
+    ]
+  },
+  {
+    industry: { naics: "541", name: "Professional, Scientific, and Technical Services" },
+    archetype: { id: "expert-service", label: "Expert Service Firm" },
+    workflows: [
+      { id: "scoping", label: "Client scoping and engagement" },
+      { id: "delivery", label: "Project and service delivery" },
+      { id: "qa", label: "Quality assurance and review" },
+      { id: "invoicing", label: "Invoicing and collections" }
+    ]
+  }
+];
 
-export function getIndustryProfile(naics: string) {
-  const industry = graph.industries.find(i => i.naics === naics);
-  if (!industry) return null;
-
-  const archetype =
-    graph.archetypes.find(a => a.id === industry.archetypeId) || null;
-  const workflows = graph.workflows.filter(
-    w => w.archetypeId === industry.archetypeId
-  );
-
-  return { industry, archetype, workflows };
-}
-
-export function getSimilarIndustries(naics: string) {
-  const base = graph.industries.find(i => i.naics === naics);
-  if (!base) return [];
-  return graph.industries.filter(
-    i => i.archetypeId === base.archetypeId && i.naics !== naics
-  );
+export function getIndustryProfile(naics: string): IndustryProfile | null {
+  const normalized = naics.trim();
+  const match =
+    INDUSTRY_PROFILES.find((p) => p.industry.naics === normalized) ?? null;
+  return match;
 }

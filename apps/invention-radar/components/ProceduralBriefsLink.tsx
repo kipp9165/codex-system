@@ -25,11 +25,21 @@ export function ProceduralBriefsLink({ naics, goal }: ProceduralBriefsLinkProps)
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       disabled={disabled}
-      className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+      className={`inline-flex items-center rounded-md border px-3 py-1.5 text-sm font-medium ${
+        disabled
+          ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
+          : "border-indigo-500 bg-indigo-600 text-white hover:bg-indigo-700"
+      }`}
+      title={
+        disabled
+          ? "Enter a NAICS code to generate a procedural brief"
+          : "Open Codex briefs for this industry and goal"
+      }
     >
-      📋 Open Procedural Brief →
+      Generate Procedural Brief →
     </button>
   );
 }

@@ -1,14 +1,10 @@
 import { FormEvent, useState } from "react";
+import { type ProceduralBrief } from "../../../codex/cii/generateProceduralBrief";
 import { AutoBriefShimmer } from "../../../apps/invention-radar/components/AutoBriefShimmer";
 
-type ProceduralBrief = {
-  industryName: string;
-  naics: string;
-  archetypeLabel: string | null;
-  workflows: string[];
-  nextMoves: string[];
-  notes: string[];
-};
+type BriefResponse =
+  | { ok: true; brief: ProceduralBrief }
+  | { ok: false; error: string };
 
 export default function ProceduralBriefsPage() {
   const [naics, setNaics] = useState("621");
@@ -30,9 +26,7 @@ export default function ProceduralBriefsPage() {
         body: JSON.stringify({ naics, goal }),
       });
 
-      const data = (await res.json()) as
-        | { ok: true; brief: ProceduralBrief }
-        | { ok: false; error: string };
+      const data = (await res.json()) as BriefResponse;
 
       if (!data.ok) {
         setError(data.error || "Failed to generate brief");
