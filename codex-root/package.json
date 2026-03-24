@@ -1,0 +1,19 @@
+{
+  "name": "codex-root",
+  "version": "0.7.0",
+  "description": "Codex Root v0.7 – backend substrate for Invention Radar and procedural modules.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "NODE_ENV=development node index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  }
+}
