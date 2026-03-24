@@ -1,1 +1,7 @@
 
+POST http://localhost:10000/radar/analyze
+Content-Type: application/json
+
+{
+  "input": "A system that predicts wildlife crossings to prevent collisions."
+}

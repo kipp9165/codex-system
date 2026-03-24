@@ -161,6 +161,10 @@ app.use((err, req, res, next) => {
 });
 
 // ----- Server bootstrap -----
+app.get("/", (req, res) => {
+  res.send("Codex Root v0.7 is running");
+});
+
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Codex Root v0.7 running on port ${PORT}`);
