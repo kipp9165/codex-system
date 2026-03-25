@@ -1,0 +1,41 @@
+{
+  "industries": [
+    {
+      "naics": "621",
+      "name": "Ambulatory Health Care Services",
+      "cluster": "Health Services",
+      "archetypeId": "clinical"
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "clinical",
+      "label": "Educational & Clinical Workflow",
+      "description": "Intake, assessment, documentation, compliance, outcome reporting."
+    }
+  ],
+  "workflows": [
+    {
+      "id": "patient-intake",
+      "label": "Patient Intake",
+      "archetypeId": "clinical",
+      "steps": [
+        "Collect demographics",
+        "Verify insurance",
+        "Capture consent",
+        "Create record"
+      ]
+    },
+    {
+      "id": "clinical-assessment",
+      "label": "Clinical Assessment",
+      "archetypeId": "clinical",
+      "steps": [
+        "Review history",
+        "Perform assessment",
+        "Document findings",
+        "Plan next steps"
+      ]
+    }
+  ]
+}
