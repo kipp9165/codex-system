@@ -1,0 +1,12 @@
+{
+  "prompts": [
+    "System stable. Nothing unusual detected.",
+    "Minor electromagnetic anomaly observed; monitor closely.",
+    "Pattern matches stored phenomenon signature: proceed with caution.",
+    "High signature correlation: recommended protective measures engaged."
+  ],
+  "_meta": {
+    "format": "round-robin-v1",
+    "deterministic": true
+  }
+}
