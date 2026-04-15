@@ -1,21 +1,36 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+// Codex Root v0.7
+// Core backend engine for Invention Radar / Codex Labs
+
+const express = require("express");
 const cors = require("cors");
-const morgan = require("morgan");
 
 const app = express();
 
-// ----- Global middleware -----
+// ----- Middleware -----
 app.use(cors());
-app.use(bodyParser.json({ limit: "1mb" }));
-app.use(morgan("combined"));
+app.use(express.json({ limit: "1mb" }));
 
-// ----- Basic health + version -----
+// Simple request logging for stability and observability
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    console.log(
+      `[${new Date().toISOString()}] ${req.method} ${req.originalUrl} -> ${
+        res.statusCode
+      } (${duration}ms)`
+    );
+  });
+  next();
+});
+
+// ----- Health & root routes -----
+
+// Render / uptime / health check
 app.get("/", (req, res) => {
-  res
-    .status(200)
-    .type("text/plain")
-    .send("Codex Root v0.7 is running.");
+  res.status(200).send("Codex Root v0.7 is running");
 });
 
 // Optional explicit health endpoint
@@ -28,144 +43,75 @@ app.get("/health", (req, res) => {
   });
 });
 
-// ----- Invention Radar: /radar/analyze -----
-// Input: { "input": "freeform idea text" }
-// Output: { "signals": { ... } }
-app.post("/radar/analyze", (req, res) => {
+// ----- Core Invention Radar stub (safe, stable, extendable) -----
+
+// v0.7: single entrypoint for analysis
+app.post("/radar", (req, res) => {
   try {
-    const { input } = req.body;
+    const { input } = req.body || {};
 
     if (!input || typeof input !== "string") {
-      return res
-        .status(400)
-        .json({ error: "Missing or invalid 'input' string." });
+      return res.status(400).json({
+        error: "Missing or invalid 'input'. Expected a non-empty string."
+      });
     }
 
-    // Placeholder deterministic extraction – safe, no external calls.
-    const signals = {
-      problem: "Extracted problem statement from input.",
-      solution: "Extracted solution concept from input.",
-      industry: "Inferred industry or domain.",
-      novelty: "Inferred novelty pattern.",
-      mechanics: "Key mechanics / moving parts.",
-      risks: [
-        "Example risk 1 – execution risk.",
-        "Example risk 2 – market adoption risk."
-      ]
+    // Placeholder analysis logic — safe, deterministic, and ready to be
+    // replaced by your AI/agent pipeline. For now, it returns a structured,
+    // stable response shape that the frontend and agents can rely on.
+
+    const now = new Date().toISOString();
+
+    const response = {
+      meta: {
+        service: "codex-root",
+        module: "invention-radar",
+        version: "0.7.0",
+        timestamp: now
+      },
+      input: {
+        raw: input.trim(),
+        length: input.trim().length
+      },
+      analysis: {
+        noveltyScore: 0.72, // placeholder
+        riskFlags: [],
+        industryTags: ["UNCLASSIFIED"], // placeholder
+        confidence: 0.65 // placeholder
+      },
+      proceduralBrief: {
+        summary:
+          "This is a v0.7 placeholder procedural brief. The full Invention Radar pipeline will enrich this with legal, technical, and strategic guidance.",
+        recommendedNextSteps: [
+          "Clarify the core inventive concept in one sentence.",
+          "Identify prior art or similar systems you are aware of.",
+          "Decide whether this is patent, trade secret, or publication oriented.",
+          "Run a deeper Invention Radar pass once the full pipeline is online."
+        ]
+      }
     };
 
-    return res.status(200).json({ signals });
+    return res.status(200).json(response);
   } catch (err) {
-    console.error("Error in /radar/analyze:", err);
-    return res.status(500).json({ error: "Internal error in /radar/analyze." });
+    console.error("Error in /radar:", err);
+    return res.status(500).json({
+      error: "Internal server error in Invention Radar module."
+    });
   }
 });
 
-// ----- Invention Radar: /radar/score -----
-// Input: { "signals": { ... } }
-// Output: { "scores": { novelty, viability, risk } }
-app.post("/radar/score", (req, res) => {
-  try {
-    const { signals } = req.body;
-
-    if (!signals || typeof signals !== "object") {
-      return res
-        .status(400)
-        .json({ error: "Missing or invalid 'signals' object." });
-    }
-
-    // Placeholder deterministic scoring – stable, no randomness.
-    const scores = {
-      novelty: 0.78,
-      viability: 0.64,
-      risk: 0.32
-    };
-
-    return res.status(200).json({ scores });
-  } catch (err) {
-    console.error("Error in /radar/score:", err);
-    return res.status(500).json({ error: "Internal error in /radar/score." });
-  }
-});
-
-// ----- Invention Radar: /radar/brief -----
-// Input: { "signals": { ... }, "scores": { ... } }
-// Output: { "brief": "string" }
-app.post("/radar/brief", (req, res) => {
-  try {
-    const { signals, scores } = req.body;
-
-    if (!signals || typeof signals !== "object") {
-      return res
-        .status(400)
-        .json({ error: "Missing or invalid 'signals' object." });
-    }
-
-    if (!scores || typeof scores !== "object") {
-      return res
-        .status(400)
-        .json({ error: "Missing or invalid 'scores' object." });
-    }
-
-    const brief = `
-Invention Radar Brief
-
-Problem:
-${signals.problem || "N/A"}
-
-Solution:
-${signals.solution || "N/A"}
-
-Industry:
-${signals.industry || "N/A"}
-
-Novelty:
-${signals.novelty || "N/A"}
-
-Mechanics:
-${signals.mechanics || "N/A"}
-
-Risks:
-${
-  Array.isArray(signals.risks) && signals.risks.length > 0
-    ? signals.risks.join(", ")
-    : "N/A"
-}
-
-Scores:
-- Novelty: ${scores.novelty ?? "N/A"}
-- Viability: ${scores.viability ?? "N/A"}
-- Risk: ${scores.risk ?? "N/A"}
-`.trim();
-
-    return res.status(200).json({ brief });
-  } catch (err) {
-    console.error("Error in /radar/brief:", err);
-    return res.status(500).json({ error: "Internal error in /radar/brief." });
-  }
-});
-
-// ----- 404 fallback -----
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Route not found.",
-    method: req.method,
-    path: req.path
-  });
-});
-
-// ----- Global error handler -----
-app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err);
-  res.status(500).json({ error: "Unhandled server error." });
+// Backwards-compatible root POST (if you were previously POSTing to `/`)
+app.post("/", (req, res) => {
+  // Delegate to /radar for now to keep behavior consistent
+  req.url = "/radar";
+  app._router.handle(req, res);
 });
 
 // ----- Server bootstrap -----
-app.get("/", (req, res) => {
-  res.send("Codex Root v0.7 is running");
-});
-
 const PORT = process.env.PORT || 10000;
+
 app.listen(PORT, () => {
+  console.log(`Codex Root v0.7 running on port ${PORT}`);
+});
   console.log(`Codex Root v0.7 running on port ${PORT}`);
 });

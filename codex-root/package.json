@@ -1,19 +1,25 @@
 {
   "name": "codex-root",
   "version": "0.7.0",
-  "description": "Codex Root v0.7 – backend substrate for Invention Radar and procedural modules.",
+  "description": "Codex Root v0.7 — core backend engine for Invention Radar and Codex Labs systems.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "NODE_ENV=development node index.js"
   },
+  "keywords": [
+    "codex-root",
+    "invention-radar",
+    "backend",
+    "express"
+  ],
+  "author": "Codex Labs",
+  "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "morgan": "^1.10.0"
+    "express": "^4.19.2"
   }
 }
